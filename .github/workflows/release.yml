@@ -1,0 +1,129 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    name: Build Windows (exe + msi)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: flutter pub get
+      - run: flutter build windows --release
+      - name: Package
+        run: |
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath muhan_easy_notes_neo_windows.zip
+          echo "Generated muhan_easy_notes_neo_windows.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: muhan_easy_notes_neo_windows.zip
+
+  build-macos:
+    name: Build macOS (dmg)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: flutter pub get
+      - run: flutter build macos --release
+      - name: Package dmg
+        run: |
+          cp -r build/macos/Build/Products/Release/*.app /tmp/
+          hdiutil create -volname "MuHanEasyNotes NEO" -srcfolder /tmp -ov -format UDZO muhan_easy_notes_neo_macos.dmg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: muhan_easy_notes_neo_macos.dmg
+
+  build-linux:
+    name: Build Linux (deb + tar.gz)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+      - uses: dtolnay/rust-toolchain@stable
+      - run: flutter pub get
+      - run: flutter build linux --release
+      - name: Package tar.gz
+        run: |
+          cd build/linux/x64/release/bundle
+          tar -czvf ../../../muhan_easy_notes_neo_linux.tar.gz .
+          cd ../../../../..
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: muhan_easy_notes_neo_linux.tar.gz
+
+  build-web:
+    name: Build Web (zip)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+      - run: flutter pub get
+      - run: flutter build web --release
+      - name: Package web
+        run: |
+          cd build/web
+          zip -r ../../muhan_easy_notes_neo_web.zip .
+          cd ../..
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web
+          path: muhan_easy_notes_neo_web.zip
+
+  release:
+    name: Create Release
+    needs: [build-windows, build-macos, build-linux, build-web]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: 'MuHanEasyNotes NEO v2.0.0'
+          body: |
+            ## MuHanEasyNotes NEO v2.0.0 Release Notes
+            
+            🎉 **完全重写！** 从 Android Wear OS 迁移到跨平台桌面/Web
+            
+            ### 新特性
+            - ✨ Flutter + Rust 技术栈
+            - 🪟 Windows (Fluent Design)、macOS (HIG 三栏)、Linux (GTK 混合)、Web (PWA)
+            - 🔄 旧版数据迁移向导
+            - 🔐 本地 AES-GCM 加密
+            - ☁️ WebDAV 同步
+            - 🏷️ 7 种主题色、置顶、回收站
+            
+            ### 移除
+            - ❌ 语音输入功能
+            - ❌ Android Wear OS 支持
+            
+            ### 升级指南
+            1. 从旧版导出 JSON 备份
+            2. 安装新版，首次启动运行迁移向导
+            3. 选择旧版 JSON 文件完成导入
+          files: artifacts/*

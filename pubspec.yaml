@@ -1,0 +1,31 @@
+name: muhan_easy_notes_neo
+description: "MuHanEasyNotes NEO (慕寒易笔记) — 跨平台轻量笔记应用"
+publish_to: 'none'
+version: 2.0.0+200000
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+  flutter: '>=3.24.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  go_router: ^14.2.0
+  provider: ^6.1.2
+  file_picker: ^8.0.0+1
+  path_provider: ^2.1.4
+  shared_preferences: ^2.3.2
+  intl: ^0.20.3
+  flutter_rust_bridge: ^2.10.0
+  meta: ^1.12.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
