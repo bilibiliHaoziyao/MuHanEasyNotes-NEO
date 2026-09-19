@@ -12,7 +12,9 @@ import '../../core/theme.dart';
 enum _WizardStep { welcome, source, preview, execute, done }
 
 class MigrationWizard extends StatefulWidget {
-  const MigrationWizard({super.key});
+  final ValueChanged<bool>? onDone;
+
+  const MigrationWizard({super.key, this.onDone});
 
   @override
   State<MigrationWizard> createState() => _MigrationWizardState();
@@ -408,7 +410,7 @@ class _MigrationWizardState extends State<MigrationWizard> {
           if (_step == _WizardStep.welcome || _step == _WizardStep.source)
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(true);
+                widget.onDone?.call(false);
               },
               child: const Text('跳过迁移'),
             ),
@@ -417,7 +419,7 @@ class _MigrationWizardState extends State<MigrationWizard> {
             onPressed: _canGoNext() && !_isImporting
                 ? () => _nextStep()
                 : isDone
-                    ? () => Navigator.of(context).pop(true)
+                    ? () => widget.onDone?.call(true)
                     : null,
             child: Text(_nextButtonLabel()),
           ),

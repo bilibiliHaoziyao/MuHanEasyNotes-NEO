@@ -16,12 +16,7 @@ class _WindowsAppState extends State<WindowsApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConst.appNameEn,
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      darkTheme: buildTheme(dark: true),
-      home: Scaffold(
+    return Scaffold(
         body: Row(
           children: [
             _buildNavRail(),
@@ -29,7 +24,6 @@ class _WindowsAppState extends State<WindowsApp> {
             Expanded(child: _buildContent()),
           ],
         ),
-      ),
     );
   }
 

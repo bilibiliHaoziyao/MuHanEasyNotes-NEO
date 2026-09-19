@@ -18,12 +18,7 @@ class LinuxApp extends StatefulWidget {
 class _LinuxAppState extends State<LinuxApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConst.appName,
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      darkTheme: buildTheme(dark: true),
-      home: Scaffold(
+    return Scaffold(
         body: Row(
           children: [
             _buildSidebar(),
@@ -31,7 +26,6 @@ class _LinuxAppState extends State<LinuxApp> {
             Expanded(child: _buildEditorArea()),
           ],
         ),
-      ),
     );
   }
 

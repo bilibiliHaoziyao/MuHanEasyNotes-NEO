@@ -1,7 +1,7 @@
 name: muhan_easy_notes_neo
 description: "MuHanEasyNotes NEO (慕寒易笔记) — 跨平台轻量笔记应用"
 publish_to: 'none'
-version: 2.0.0+200000
+version: 2.0.1+200100
 
 environment:
   sdk: '>=3.4.0 <4.0.0'
@@ -26,6 +26,23 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+
+# Icon generation (run: dart run flutter_launcher_icons)
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/icon_1024.png"
+  min_sdk_android: 24
+  adaptive_icon_background: "#F9CA24"
+  adaptive_icon_foreground: "assets/icons/icon_1024.png"
+  web:
+    generate: true
+  windows:
+    generate: true
+    icon_size: 48
+  macos:
+    generate: true

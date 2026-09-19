@@ -22,17 +22,11 @@ class _WebAppState extends State<WebApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '${AppConst.appName} - Web',
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(),
-      darkTheme: buildTheme(dark: true),
-      home: LayoutBuilder(
+    return LayoutBuilder(
         builder: (context, constraints) {
           _isWide = constraints.maxWidth >= 720;
           return _isWide ? _buildWideLayout() : _buildNarrowLayout();
         },
-      ),
     );
   }
 

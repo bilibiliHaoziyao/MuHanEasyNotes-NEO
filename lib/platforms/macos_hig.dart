@@ -22,12 +22,7 @@ class _MacOSAppState extends State<MacOSApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConst.appName,
-      debugShowCheckedModeBanner: false,
-      theme: buildTheme(isMacOS: true),
-      darkTheme: buildTheme(dark: true, isMacOS: true),
-      home: Scaffold(
+    return Scaffold(
         body: Column(
           children: [
             _buildMacTitleBar(),
@@ -42,7 +37,6 @@ class _MacOSAppState extends State<MacOSApp> {
             ),
           ],
         ),
-      ),
     );
   }
 
