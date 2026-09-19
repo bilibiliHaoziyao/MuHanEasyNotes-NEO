@@ -17,7 +17,7 @@ jobs:
           java-version: '17'
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.x'
+          flutter-version: stable
           cache: true
       - uses: dtolnay/rust-toolchain@stable
       - name: Rust check
